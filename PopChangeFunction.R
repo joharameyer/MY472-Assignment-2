@@ -10,8 +10,8 @@ library(dplyr)
 data('population')
 
 # Create function which calculates population change between two years and prints text
-# Input: population dataset 
-# Output: calculated percentage change in population inside text snippet
+# Input: population dataset and country of interest
+# Output: calculated percentage change in population and country rank inside text snippet
 
 # !Warning!
 # This function was written using column names from the 'population' dataset
@@ -22,7 +22,7 @@ data('population')
 # names(data)[names(data) == 'old.year.var.name'] <- 'year'
 # names(data)[names(data) == 'old.year.var.name'] <- 'population'
 
-pop.change <- function(data) {
+pop.change <- function(data, country) {
   
   ## Preparation
   # Define helper function
@@ -31,7 +31,7 @@ pop.change <- function(data) {
   `%not_in%` <- purrr::negate(`%in%`)
   
   ## Check Assumption
-  # Assumption 1: population data is available for all countries across the years of interest
+  # Assumption 1: population data is available for all countries across the years of interest.
   # In this case, we are interested in the first and last year for which data is available
   # in the dataset.
   
@@ -60,11 +60,45 @@ pop.change <- function(data) {
     summarise(perct_change = (last(population) - first(population))/first(population)*100) %>%
     ungroup()
   
-  #Output
-  print(paste0("On average population size changed by ", round(mean(change.df$perct_change), 2),
-               " percent between ", firstyear," and ", lastyear, " across the countries in the dataset."))
-  print(ifelse(length(no.data)>0,
-               paste0("Please note that the following countries were removed due to missing data: ",
-                      paste(no.data$country, collapse = ", "), "."),
-               paste0("")))
+  # calculate mean percentage change across all countries 
+  mean.change <- mean(change.df$perct_change)
+  
+  # calculate percentage change for country defined
+  country.change <- change.df$perct_change[change.df$country == country]
+  
+  # calculate rank of each country 
+  change.df$low2high <- rank(change.df$perct_change)
+  change.df$high2low <- rank(- change.df$perct_change)
+  
+  
+  ##Output
+  
+  if (country.change > mean.change) {
+    
+    # calculate rank of country defined high to low
+    country.rank <- change.df$high2low[change.df$country == country]
+    
+    # print text
+    print(paste0("On average population size changed by ", round(mean(change.df$perct_change), 2),
+                 " percent between ", firstyear," and ", lastyear, " across the countries in the dataset.", " At ", round(country.change,2)," percent population change ", country ," was ", round((country.change - mean.change),2) ," percent above the average. This places ", country," as the country with the ", country.rank, ". largest increase in population numbers."))
+    
+    print(ifelse(length(no.data)>0,
+                 paste0("Please note that the following countries were removed due to missing data: ",
+                        paste(no.data$country, collapse = ", "), "."),
+                 paste0("")))
+    
+  } else {
+    
+    # calculate rank of country defined low to high
+    country.rank <- change.df$low2high[change.df$country == country]
+    
+    print(paste0("On average population size changed by ", round(mean(change.df$perct_change), 2),
+                 " percent between ", firstyear," and ", lastyear, " across the countries in the dataset.", " At ", round(country.change,2)," percent population change ", country ," was ", round((country.change - mean.change),2) ," percent below the average. This places ", country," as the country with the ", country.rank, ". lowest increase in population numbers."))
+    
+    print(ifelse(length(no.data)>0,
+                 paste0("Please note that the following countries were removed due to missing data: ",
+                        paste(no.data$country, collapse = ", "), "."),
+                 paste0("")))
+    
+  }
 }
