@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = FALSE)
 # Calculates population change and inserts outcome into text chunk
 This function was built to work with the 'population' dataset in tidry. It takes a dataset that includes population data for different countries across different years and calculates average population change between the first and the last year for which data is available. It then inserts the calculated result in a text chunk. This function may for instance be useful for a yearly report that takes up-to-date population figures and calculates population change against a baseline.
 
-The Example below shows the output of the function for a country with below average population growth (Germany) and a country with above average population growth (Rwanda).
+The example below shows the output of the function for a country with below average population growth (Germany) and a country with above average population growth (Rwanda).
 
 ```{r plot_example, echo=FALSE}
 # Load dataset 'population' from tidyr
