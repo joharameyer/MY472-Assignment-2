@@ -363,17 +363,22 @@ display: none;
 <h1>Calculates population change and inserts outcome into text
 chunk</h1>
 <p>This function was built to work with the ‘population’ dataset in
-tidry. It takes a dataset that includes population data for different
-countries across different years and calculates average population
-change between the first and the last year for which data is available.
-It then inserts the calculated result in a text chunk. This function may
-for instance be useful for a yearly report that takes up-to-date
-population figures and calculates population change against a
+tidry. The function takes two inputs, a dataset that includes population
+data for different countries across different years and a country name.
+It then calculates average population change between the first and the
+last year for which data is available for all countries, the difference
+in population change between the specified country and the average for
+all countries, and the rank of the country compared to all other
+countries in the dataset (either n. highest or n. lowest rate of
+population change based on whether population change was above or below
+the average). It then inserts the calculated results in a text chunk.
+This function may for instance be useful for a yearly report that takes
+up-to-date population figures and calculates population change against a
 baseline.</p>
-<p>The Example below shows the output of the function for a country with
+<p>The example below shows the output of the function for a country with
 below average population growth (Germany) and a country with above
 average population growth (Rwanda).</p>
-<pre><code>## [1] &quot;On average population size changed by 33.31 percent between 1995 and 2013 across the countries in the dataset. At -0.51 percent population change Germany was -33.82 percent below the average. This places Germany as the country with the 22. lowest increase in population numbers.&quot;
+<pre><code>## [1] &quot;On average population size changed by 33.31 percent between 1995 and 2013 across the countries in the dataset. At -0.51 percent population change Germany was 33.82 percent below the average. This places Germany as the country with the 22. lowest increase in population numbers.&quot;
 ## [1] &quot;Please note that the following countries were removed due to missing data: Bonaire, Saint Eustatius and Saba, Curaçao, Montenegro, Netherlands Antilles, Serbia, Serbia &amp; Montenegro, Sint Maarten (Dutch part), South Sudan, Timor-Leste.&quot;</code></pre>
 <pre><code>## [1] &quot;On average population size changed by 33.31 percent between 1995 and 2013 across the countries in the dataset. At 107.92 percent population change Rwanda was 74.61 percent above the average. This places Rwanda as the country with the 6. largest increase in population numbers.&quot;
 ## [1] &quot;Please note that the following countries were removed due to missing data: Bonaire, Saint Eustatius and Saba, Curaçao, Montenegro, Netherlands Antilles, Serbia, Serbia &amp; Montenegro, Sint Maarten (Dutch part), South Sudan, Timor-Leste.&quot;</code></pre>
@@ -461,7 +466,7 @@ country.rank &lt;- change.df$high2low[change.df$country == country]
 
  # print text
 print(paste0(&quot;On average population size changed by &quot;, round(mean(change.df$perct_change), 2),
-             &quot; percent between &quot;, firstyear,&quot; and &quot;, lastyear, &quot; across the countries in the dataset.&quot;, &quot; At &quot;, round(country.change,2),&quot; percent population change &quot;, country ,&quot; was &quot;, round((country.change - mean.change),2) ,&quot; percent above the average. This places &quot;, country,&quot; as the country with the &quot;, country.rank, &quot;. largest increase in population numbers.&quot;))
+             &quot; percent between &quot;, firstyear,&quot; and &quot;, lastyear, &quot; across the countries in the dataset.&quot;, &quot; At &quot;, round(country.change,2),&quot; percent population change &quot;, country ,&quot; was &quot;, round(abs((country.change - mean.change)),2) ,&quot; percent above the average. This places &quot;, country,&quot; as the country with the &quot;, country.rank, &quot;. largest increase in population numbers.&quot;))
   
 print(ifelse(length(no.data)&gt;0,
              paste0(&quot;Please note that the following countries were removed due to missing data: &quot;,
@@ -474,7 +479,7 @@ print(ifelse(length(no.data)&gt;0,
 country.rank &lt;- change.df$low2high[change.df$country == country]
 
 print(paste0(&quot;On average population size changed by &quot;, round(mean(change.df$perct_change), 2),
-             &quot; percent between &quot;, firstyear,&quot; and &quot;, lastyear, &quot; across the countries in the dataset.&quot;, &quot; At &quot;, round(country.change,2),&quot; percent population change &quot;, country ,&quot; was &quot;, round((country.change - mean.change),2) ,&quot; percent below the average. This places &quot;, country,&quot; as the country with the &quot;, country.rank, &quot;. lowest increase in population numbers.&quot;))
+             &quot; percent between &quot;, firstyear,&quot; and &quot;, lastyear, &quot; across the countries in the dataset.&quot;, &quot; At &quot;, round(country.change,2),&quot; percent population change &quot;, country ,&quot; was &quot;, round(abs((country.change - mean.change)),2) ,&quot; percent below the average. This places &quot;, country,&quot; as the country with the &quot;, country.rank, &quot;. lowest increase in population numbers.&quot;))
 
 print(ifelse(length(no.data)&gt;0,
              paste0(&quot;Please note that the following countries were removed due to missing data: &quot;,

@@ -16,10 +16,9 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Function pop.change()
 # Calculates population change and inserts outcome into text chunk
-This function was built to work with the 'population' dataset in tidry. It takes a dataset that includes population data for different countries across different years and calculates average population change between the first and the last year for which data is available. It then inserts the calculated result in a text chunk. This function may for instance be useful for a yearly report that takes up-to-date population figures and calculates population change against a baseline.
+This function was built to work with the 'population' dataset in tidry. The function takes two inputs, a dataset that includes population data for different countries across different years and a country name. It then calculates average population change between the first and the last year for which data is available for all countries, the difference in population change between the specified country and the average for all countries, and the rank of the country compared to all other countries in the dataset (either n. highest or n. lowest rate of population change based on whether population change was above or below the average). It then inserts the calculated results in a text chunk. This function may for instance be useful for a yearly report that takes up-to-date population figures and calculates population change against a baseline.
 
 The example below shows the output of the function for a country with below average population growth (Germany) and a country with above average population growth (Rwanda).
-
 ```{r plot_example, echo=FALSE}
 # Load dataset 'population' from tidyr
 data('population')
@@ -95,7 +94,7 @@ country.rank <- change.df$high2low[change.df$country == country]
 
  # print text
 print(paste0("On average population size changed by ", round(mean(change.df$perct_change), 2),
-             " percent between ", firstyear," and ", lastyear, " across the countries in the dataset.", " At ", round(country.change,2)," percent population change ", country ," was ", round((country.change - mean.change),2) ," percent above the average. This places ", country," as the country with the ", country.rank, ". largest increase in population numbers."))
+             " percent between ", firstyear," and ", lastyear, " across the countries in the dataset.", " At ", round(country.change,2)," percent population change ", country ," was ", round(abs((country.change - mean.change)),2) ," percent above the average. This places ", country," as the country with the ", country.rank, ". largest increase in population numbers."))
   
 print(ifelse(length(no.data)>0,
              paste0("Please note that the following countries were removed due to missing data: ",
@@ -108,7 +107,7 @@ print(ifelse(length(no.data)>0,
 country.rank <- change.df$low2high[change.df$country == country]
 
 print(paste0("On average population size changed by ", round(mean(change.df$perct_change), 2),
-             " percent between ", firstyear," and ", lastyear, " across the countries in the dataset.", " At ", round(country.change,2)," percent population change ", country ," was ", round((country.change - mean.change),2) ," percent below the average. This places ", country," as the country with the ", country.rank, ". lowest increase in population numbers."))
+             " percent between ", firstyear," and ", lastyear, " across the countries in the dataset.", " At ", round(country.change,2)," percent population change ", country ," was ", round(abs((country.change - mean.change)),2) ," percent below the average. This places ", country," as the country with the ", country.rank, ". lowest increase in population numbers."))
 
 print(ifelse(length(no.data)>0,
              paste0("Please note that the following countries were removed due to missing data: ",

@@ -80,7 +80,7 @@ pop.change <- function(data, country) {
     
     # print text
     print(paste0("On average population size changed by ", round(mean(change.df$perct_change), 2),
-                 " percent between ", firstyear," and ", lastyear, " across the countries in the dataset.", " At ", round(country.change,2)," percent population change ", country ," was ", round((country.change - mean.change),2) ," percent above the average. This places ", country," as the country with the ", country.rank, ". largest increase in population numbers."))
+                 " percent between ", firstyear," and ", lastyear, " across the countries in the dataset.", " At ", round(country.change,2)," percent population change ", country ," was ", round(abs((country.change - mean.change)),2) ," percent above the average. This places ", country," as the country with the ", country.rank, ". largest increase in population numbers."))
     
     print(ifelse(length(no.data)>0,
                  paste0("Please note that the following countries were removed due to missing data: ",
@@ -93,7 +93,7 @@ pop.change <- function(data, country) {
     country.rank <- change.df$low2high[change.df$country == country]
     
     print(paste0("On average population size changed by ", round(mean(change.df$perct_change), 2),
-                 " percent between ", firstyear," and ", lastyear, " across the countries in the dataset.", " At ", round(country.change,2)," percent population change ", country ," was ", round((country.change - mean.change),2) ," percent below the average. This places ", country," as the country with the ", country.rank, ". lowest increase in population numbers."))
+                 " percent between ", firstyear," and ", lastyear, " across the countries in the dataset.", " At ", round(country.change,2)," percent population change ", country ," was ", round(abs((country.change - mean.change)),2) ," percent below the average. This places ", country," as the country with the ", country.rank, ". lowest increase in population numbers."))
     
     print(ifelse(length(no.data)>0,
                  paste0("Please note that the following countries were removed due to missing data: ",
