@@ -26,6 +26,7 @@ pop.change <- function(data) {
   
   ## Preparation
   # Define helper function
+  # Code for helper function was taken from (https://stackoverflow.com/questions/5831794/opposite-of-in-exclude-rows-with-values-specified-in-a-vector)
   
   `%not_in%` <- purrr::negate(`%in%`)
   
