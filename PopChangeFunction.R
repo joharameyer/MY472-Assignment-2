@@ -13,6 +13,15 @@ data('population')
 # Input: population dataset 
 # Output: calculated percentage change in population inside text snippet
 
+# !Warning!
+# This function was written using column names from the 'population' dataset
+# found in the 'tidyr' package. In order to use this function with a different dataset some
+# columns may need to be renamed. The code below shows how to rename columns to match the
+# names used in the function below
+# names(data)[names(data) == 'old.country.var.name'] <- 'country'
+# names(data)[names(data) == 'old.year.var.name'] <- 'year'
+# names(data)[names(data) == 'old.year.var.name'] <- 'population'
+
 pop.change <- function(data) {
   
   ## Preparation
